@@ -1,0 +1,308 @@
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { ClassifiedHeader } from '@/components/ClassifiedHeader';
+import { StatsOverview } from '@/components/StatsOverview';
+import { TelemetryTables } from '@/components/TelemetryTables';
+import { 
+  ProcessTelemetry, 
+  NetworkPortTelemetry, 
+  RegistryPersistenceTelemetry, 
+  ExtractionEventLog,
+  TelemetryBatch 
+} from '@/lib/types';
+import { Terminal, Shield, Play, ArrowRight, Zap, RefreshCw, Cpu, Layers } from 'lucide-react';
+
+export default function DashboardPage() {
+  const [processes, setProcesses] = useState<ProcessTelemetry[]>([]);
+  const [ports, setPorts] = useState<NetworkPortTelemetry[]>([]);
+  const [persistence, setPersistence] = useState<RegistryPersistenceTelemetry[]>([]);
+  const [logs, setLogs] = useState<ExtractionEventLog[]>([]);
+  const [lastUpdated, setLastUpdated] = useState<string>('');
+  const [batchCount, setBatchCount] = useState<number>(0);
+  const [latestBatchId, setLatestBatchId] = useState<string>('INITIALIZING...');
+  const [isStreaming, setIsStreaming] = useState<boolean>(false);
+  const [latestPayloadJson, setLatestPayloadJson] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [flashNewData, setFlashNewData] = useState<boolean>(false);
+
+  // Apply new snapshot into state
+  const applySnapshot = useCallback((data: any) => {
+    if (!data) return;
+    if (data.processes) setProcesses(data.processes);
+    if (data.ports) setPorts(data.ports);
+    if (data.persistence) setPersistence(data.persistence);
+    if (data.logs) setLogs(data.logs);
+    if (data.lastUpdated) setLastUpdated(data.lastUpdated);
+    if (data.batchCount !== undefined) setBatchCount(data.batchCount);
+    if (data.latestBatchId) setLatestBatchId(data.latestBatchId);
+    setLatestPayloadJson(data);
+
+    // Visual ping flash
+    setFlashNewData(true);
+    setTimeout(() => setFlashNewData(false), 800);
+  }, []);
+
+  // Fetch initial telemetry via GET
+  const fetchTelemetry = useCallback(async () => {
+    try {
+      const res = await fetch('/api/telemetry', { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          applySnapshot(json.data);
+        }
+      }
+    } catch (e) {
+      console.error('[Dashboard] Error fetching telemetry:', e);
+    }
+  }, [applySnapshot]);
+
+  // Establish SSE connection for zero-refresh real-time push
+  useEffect(() => {
+    fetchTelemetry();
+
+    let eventSource: EventSource | null = null;
+    try {
+      eventSource = new EventSource('/api/telemetry/stream');
+      eventSource.onopen = () => {
+        setIsStreaming(true);
+      };
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          applySnapshot(data);
+        } catch (err) {
+          // ignore keepalive pings
+        }
+      };
+      eventSource.onerror = () => {
+        setIsStreaming(false);
+      };
+    } catch (e) {
+      setIsStreaming(false);
+    }
+
+    // Fallback polling interval every 2.5 seconds
+    const pollInterval = setInterval(() => {
+      fetchTelemetry();
+    }, 2500);
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+      clearInterval(pollInterval);
+    };
+  }, [fetchTelemetry, applySnapshot]);
+
+  // Trigger test burst directly from UI (calls POST /api/telemetry)
+  const handleTriggerTestBurst = async () => {
+    setIsLoading(true);
+    try {
+      const randomPid = Math.floor(1000 + Math.random() * 9000);
+      const randomPort = Math.floor(1024 + Math.random() * 60000);
+      const randomBatch = `JOCKY-UI-0x${Math.floor(0x100000 + Math.random() * 0xEFFFFF).toString(16).toUpperCase()}`;
+
+      const testPayload: TelemetryBatch = {
+        batchId: randomBatch,
+        engineVersion: '4.9.2-UI-BURST',
+        timestamp: new Date().toISOString(),
+        hostInfo: {
+          hostname: 'SEC-OPS-FORENSIC-01',
+          os: 'Windows 11 Pro Enterprise x64 [Build 22631.3880]',
+          kernelBase: '0xFFFFF80436A00000',
+          integrityLevel: 'SYSTEM',
+          activeSession: 'CONSOLE-0',
+          sysCallMethod: 'DIRECT_ZW_STUBS',
+          driverStatus: 'BURST_CAPTURE'
+        },
+        statistics: {
+          processesAnalyzed: 6,
+          openSockets: 6,
+          persistenceKeys: 6,
+          totalThreats: 5,
+          extractionLatencyMs: 980
+        },
+        telemetry: {
+          processes: [
+            {
+              pid: randomPid,
+              ppid: 1024,
+              name: "winlogon_worker.exe",
+              path: "C:\\Windows\\Temp\\winlogon_worker.exe",
+              user: "NT AUTHORITY\\SYSTEM",
+              integrity: "SYSTEM",
+              threads: 12,
+              memoryBase: `0x7FF${Math.floor(100000000 + Math.random() * 900000000).toString(16).toUpperCase()}`,
+              memorySize: "32.4 MB",
+              status: "SUSPICIOUS_INJECTION",
+              anomaly: "Thread APC queued with hijacked RIP pointer to shellcode buffer",
+              sha256: "8b7d901f4c2e6b7a1098ef7321e1a4980bc9d1f3b0e14a278912e756c4d0a921",
+              threatLevel: "CRITICAL"
+            },
+            ...processes.slice(1)
+          ],
+          ports: [
+            {
+              protocol: "TCP",
+              localAddress: "0.0.0.0",
+              localPort: randomPort,
+              foreignAddress: "45.142.214.88",
+              foreignPort: 443,
+              state: "ESTABLISHED",
+              pid: randomPid,
+              processName: "winlogon_worker.exe",
+              service: "C2 Exfiltration Beacon / TLS Staged",
+              risk: "CRITICAL",
+              country: "NL",
+              bytesSent: "1,840,112 B",
+              bytesRecv: "320,100 B"
+            },
+            ...ports.slice(1)
+          ],
+          persistence: [
+            {
+              hive: "HKLM",
+              keyPath: "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit\\notepad.exe",
+              valueName: "MonitorProcess",
+              valueType: "REG_SZ",
+              data: "C:\\ProgramData\\Diagnostics\\agent.exe",
+              classification: "SILENT_PROCESS_EXIT_MONITOR",
+              mitreId: "T1546.012",
+              severity: "HIGH",
+              lastModified: new Date().toISOString()
+            },
+            ...persistence.slice(1)
+          ]
+        },
+        logEvent: {
+          title: `Direct Syscall Forensic Burst Captured [${randomBatch}]`,
+          status: "EXTRACTION_SUCCESS",
+          details: `Manual forensic extraction triggered. Telemetry ingested into memory cache without page reload.`,
+          color: "emerald"
+        }
+      };
+
+      await fetch('/api/telemetry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testPayload)
+      });
+    } catch (e) {
+      console.error('[Dashboard] Error sending burst:', e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex-1 flex flex-col relative z-10 bg-radial-vignette min-h-screen">
+      {/* Visual Flash Banner upon Incoming Packet */}
+      {flashNewData && (
+        <div className="fixed top-0 left-0 right-0 h-1 bg-emerald-400 glow-emerald-subtle z-50 transition-all duration-300 animate-pulse" />
+      )}
+
+      {/* Classified Header */}
+      <ClassifiedHeader
+        lastUpdated={lastUpdated}
+        batchCount={batchCount}
+        latestBatchId={latestBatchId}
+        isStreaming={isStreaming}
+        onTriggerTestBurst={handleTriggerTestBurst}
+        isLoading={isLoading}
+      />
+
+      {/* Main Forensic Dashboard Body */}
+      <main className="max-w-7xl mx-auto px-4 py-6 w-full flex-1 flex flex-col space-y-6">
+        
+        {/* Top Status Alerts & Syscall Subsystem Notice */}
+        <div className="p-3.5 bg-[#0e1118]/85 border border-slate-800 rounded-lg flex flex-wrap items-center justify-between gap-3 text-xs shadow-md backdrop-blur-sm">
+          <div className="flex items-center space-x-3">
+            <span className="flex h-3 w-3 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+            </span>
+            <div className="text-zinc-300">
+              <span className="font-bold text-emerald-400 tracking-wider">
+                LOW-LEVEL FORENSIC EXTRACTION ENGINE ONLINE
+              </span>
+              <span className="hidden sm:inline text-slate-600"> — </span>
+              <span className="hidden sm:inline text-zinc-400 font-sans">
+                Awaiting telemetry streams from Python extraction agent (<code className="text-emerald-300 bg-[#080a0f] px-1.5 py-0.5 rounded border border-slate-800 font-mono">python jocky_extractor.py</code>)
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2 text-[11px] font-mono">
+            <span className="px-2.5 py-0.5 rounded bg-[#080a0f] border border-slate-800 text-zinc-300">
+              NTDLL: <span className="text-emerald-400 font-semibold">UNHOOKED</span>
+            </span>
+            <span className="px-2.5 py-0.5 rounded bg-[#080a0f] border border-slate-800 text-zinc-300">
+              SYSCALL: <span className="text-emerald-400 font-semibold">DIRECT</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Stats & Key Performance Indicators */}
+        <StatsOverview
+          processes={processes}
+          ports={ports}
+          persistence={persistence}
+          batchCount={batchCount}
+        />
+
+        {/* Central Telemetry Tables (Processes, Ports, Persistence, Logs, JSON) */}
+        <TelemetryTables
+          processes={processes}
+          ports={ports}
+          persistence={persistence}
+          logs={logs}
+          latestPayloadJson={latestPayloadJson}
+        />
+
+        {/* Terminal Quick Execution Guide for Video Demonstration */}
+        <div className="bg-[#0e1118]/85 border border-slate-800 rounded-lg p-4 font-mono text-xs text-zinc-400 shadow-md">
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+            <div className="flex items-center space-x-2 text-zinc-200 font-semibold">
+              <Terminal className="w-4 h-4 text-emerald-400" />
+              <span>TERMINAL DEMONSTRATION RUNBOOK // PART B COMMAND LINE AGENT</span>
+            </div>
+            <span className="text-[10px] text-zinc-500 uppercase tracking-wider">MSVC x64 CUI SIMULATION</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            <div className="p-3 bg-[#080a0f] rounded-md border border-slate-800 text-[11px] space-y-1.5">
+              <div className="text-emerald-400 font-bold flex items-center gap-1.5">
+                <span>Step 1: Execute Python Forensic Extractor</span>
+              </div>
+              <div className="text-zinc-200 bg-[#0e1118] p-2.5 rounded-md border border-slate-800 select-all font-mono text-xs">
+                python jocky_extractor.py
+              </div>
+              <p className="text-[10px] text-zinc-400 font-sans leading-relaxed">
+                Runs with realistic 1-second delays between syscall resolution, unhooking, hive dumps, and sends HTTP POST to <code className="text-emerald-400 font-mono">/api/telemetry</code>.
+              </p>
+            </div>
+
+            <div className="p-3 bg-[#080a0f] rounded-md border border-slate-800 text-[11px] space-y-1.5">
+              <div className="text-emerald-400 font-bold">
+                Step 2: Real-Time Dynamic Ingestion
+              </div>
+              <p className="text-zinc-300 font-sans text-xs leading-relaxed">
+                Observe the central telemetry table above updating <strong className="text-emerald-400 font-semibold">dynamically without reloading the page</strong> when the Python script dispatches its forensic payload!
+              </p>
+              <div className="text-[10px] text-zinc-400 font-mono pt-1">
+                Endpoint: <span className="text-zinc-200">http://localhost:3000/api/telemetry</span> [POST]
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer Classification Bar */}
+      <footer className="border-t border-slate-800/80 bg-[#07090e] px-4 py-3 text-center text-[10px] text-zinc-500 font-mono tracking-widest uppercase">
+        RESTRICTED FORENSIC SYSTEM // JOCKY ENGINE // DO NOT DISTRIBUTE // DISPATCH AUTHORIZED ONLY
+      </footer>
+    </div>
+  );
+}

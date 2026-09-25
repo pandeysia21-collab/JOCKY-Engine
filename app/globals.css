@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #08090d;
+  --surface: #0e1117;
+  --surface-raised: #141822;
+  --foreground: #f1f5f9;
+  --border-slate: #1e293b;
+  --border-slate-subtle: #334155;
+  --emerald-accent: #10b981;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Tactical Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #08090d;
+  border-left: 1px solid #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* Refined Tactical Grid Background */
+.bg-tactical-grid {
+  background-color: #08090d;
+  background-image: 
+    linear-gradient(to right, rgba(51, 65, 85, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(51, 65, 85, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Soft Ambient Radial Vignette */
+.bg-radial-vignette {
+  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 65%),
+              radial-gradient(circle at 100% 100%, rgba(30, 41, 59, 0.25) 0%, transparent 50%);
+}
+
+/* Restrained Glow Effects */
+.glow-emerald-subtle {
+  box-shadow: 0 0 12px -2px rgba(16, 185, 129, 0.25);
+}
+
+.glow-emerald-badge {
+  box-shadow: 0 0 8px -1px rgba(16, 185, 129, 0.3);
+}
+
+.glow-rose-badge {
+  box-shadow: 0 0 8px -1px rgba(244, 63, 94, 0.3);
+}
+
+.glow-amber-badge {
+  box-shadow: 0 0 8px -1px rgba(245, 158, 11, 0.3);
+}
+
+/* Subtle scanning beam for active stream */
+@keyframes softPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 2.4s ease-in-out infinite;
+}
+
+/* Refined Classification Stamp */
+.classified-stamp {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
