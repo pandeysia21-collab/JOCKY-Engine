@@ -216,31 +216,42 @@ export default function DashboardPage() {
       {/* Main Forensic Dashboard Body */}
       <main className="w-full px-4 sm:px-6 lg:px-8 py-6 flex-1 flex flex-col space-y-6">
         
-        {/* Top Status Alerts & Syscall Subsystem Notice */}
-        <div className="p-3.5 bg-[#0e1118]/85 border border-slate-800 rounded-lg flex flex-wrap items-center justify-between gap-3 text-xs shadow-md backdrop-blur-sm">
-          <div className="flex items-center space-x-3">
-            <span className="flex h-3 w-3 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-            </span>
-            <div className="text-zinc-300">
-              <span className="font-bold text-emerald-400 tracking-wider">
-                LOW-LEVEL FORENSIC EXTRACTION ENGINE ONLINE
+        {/* System Status Panel */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-0">
+          <div className="p-3 bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800 rounded-lg shadow-sm dark:shadow-md transition-colors duration-300">
+            <div className="text-[10px] font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-1.5">Telemetry</div>
+            <div className="flex items-center space-x-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
-              <span className="hidden sm:inline text-slate-600"> — </span>
-              <span className="hidden sm:inline text-zinc-400 font-sans">
-                Awaiting telemetry streams from Python extraction agent (<code className="text-emerald-300 bg-[#080a0f] px-1.5 py-0.5 rounded border border-slate-800 font-mono">python jocky_extractor.py</code>)
-              </span>
+              <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase">Online</span>
             </div>
           </div>
-
-          <div className="flex items-center space-x-2 text-[11px] font-mono">
-            <span className="px-2.5 py-0.5 rounded bg-[#080a0f] border border-slate-800 text-zinc-300">
-              NTDLL: <span className="text-emerald-400 font-semibold">UNHOOKED</span>
-            </span>
-            <span className="px-2.5 py-0.5 rounded bg-[#080a0f] border border-slate-800 text-zinc-300">
-              SYSCALL: <span className="text-emerald-400 font-semibold">DIRECT</span>
-            </span>
+          <div className="p-3 bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800 rounded-lg shadow-sm dark:shadow-md transition-colors duration-300">
+            <div className="text-[10px] font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-1.5">API</div>
+            <div className="flex items-center space-x-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase">Connected</span>
+            </div>
+          </div>
+          <div className="p-3 bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800 rounded-lg shadow-sm dark:shadow-md transition-colors duration-300">
+            <div className="text-[10px] font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-1.5">Extraction Agent</div>
+            <div className="flex items-center space-x-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 dark:bg-amber-400"></span>
+              <span className="text-sm font-bold text-amber-600 dark:text-amber-400 tracking-wider uppercase">Ready</span>
+            </div>
+          </div>
+          <div className="p-3 bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800 rounded-lg shadow-sm dark:shadow-md transition-colors duration-300">
+            <div className="text-[10px] font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-1.5">Last Ingestion</div>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-bold text-zinc-800 dark:text-zinc-200 font-mono tracking-wider">
+                {lastUpdated ? new Date(lastUpdated).toLocaleTimeString() : '—'}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -262,37 +273,37 @@ export default function DashboardPage() {
         />
 
         {/* Terminal Quick Execution Guide for Video Demonstration */}
-        <div className="bg-[#0e1118]/85 border border-slate-800 rounded-lg p-4 font-mono text-base text-zinc-400 shadow-md">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
-            <div className="flex items-center space-x-3 text-zinc-200 font-semibold text-lg">
-              <Terminal className="w-5 h-5 text-emerald-400" />
+        <div className="bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800 rounded-lg p-4 font-mono text-base text-zinc-600 dark:text-zinc-400 shadow-sm dark:shadow-md transition-colors duration-300">
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-200 dark:border-slate-800 transition-colors">
+            <div className="flex items-center space-x-3 text-zinc-800 dark:text-zinc-200 font-semibold text-lg">
+              <Terminal className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               <span>TERMINAL DEMONSTRATION RUNBOOK // PART B COMMAND LINE AGENT</span>
             </div>
-            <span className="text-sm text-zinc-500 uppercase tracking-wider">MSVC x64 CUI SIMULATION</span>
+            <span className="text-sm text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">MSVC x64 CUI SIMULATION</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            <div className="p-4 bg-[#080a0f] rounded-md border border-slate-800 text-sm space-y-2">
-              <div className="text-emerald-400 font-bold flex items-center gap-1.5 text-base">
+            <div className="p-4 bg-zinc-50 dark:bg-[#080a0f] rounded-md border border-zinc-200 dark:border-slate-800 text-sm space-y-2 transition-colors">
+              <div className="text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1.5 text-base">
                 <span>Step 1: Execute Python Forensic Extractor</span>
               </div>
-              <div className="text-zinc-200 bg-[#0e1118] p-3 rounded-md border border-slate-800 select-all font-mono text-base">
+              <div className="text-zinc-700 dark:text-zinc-200 bg-white dark:bg-[#0e1118] p-3 rounded-md border border-zinc-200 dark:border-slate-800 select-all font-mono text-base transition-colors">
                 python jocky_extractor.py
               </div>
-              <p className="text-sm text-zinc-400 font-sans leading-relaxed">
-                Runs with realistic 1-second delays between syscall resolution, unhooking, hive dumps, and sends HTTP POST to <code className="text-emerald-400 font-mono">/api/telemetry</code>.
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 font-sans leading-relaxed">
+                Runs with realistic 1-second delays between syscall resolution, unhooking, hive dumps, and sends HTTP POST to <code className="text-emerald-600 dark:text-emerald-400 font-mono">/api/telemetry</code>.
               </p>
             </div>
 
-            <div className="p-4 bg-[#080a0f] rounded-md border border-slate-800 text-sm space-y-2">
-              <div className="text-emerald-400 font-bold text-base">
+            <div className="p-4 bg-zinc-50 dark:bg-[#080a0f] rounded-md border border-zinc-200 dark:border-slate-800 text-sm space-y-2 transition-colors">
+              <div className="text-emerald-700 dark:text-emerald-400 font-bold text-base">
                 Step 2: Real-Time Dynamic Ingestion
               </div>
-              <p className="text-zinc-300 font-sans text-base leading-relaxed">
-                Observe the central telemetry table above updating <strong className="text-emerald-400 font-semibold">dynamically without reloading the page</strong> when the Python script dispatches its forensic payload!
+              <p className="text-zinc-700 dark:text-zinc-300 font-sans text-base leading-relaxed">
+                Observe the central telemetry table above updating <strong className="text-emerald-600 dark:text-emerald-400 font-semibold">dynamically without reloading the page</strong> when the Python script dispatches its forensic payload!
               </p>
-              <div className="text-sm text-zinc-400 font-mono pt-1">
-                Endpoint: <span className="text-zinc-200">http://localhost:3000/api/telemetry</span> [POST]
+              <div className="text-sm text-zinc-500 dark:text-zinc-400 font-mono pt-1">
+                Endpoint: <span className="text-zinc-800 dark:text-zinc-200">http://localhost:3000/api/telemetry</span> [POST]
               </div>
             </div>
           </div>
@@ -300,7 +311,7 @@ export default function DashboardPage() {
       </main>
 
       {/* Footer Classification Bar */}
-      <footer className="border-t border-slate-800/80 bg-[#07090e] px-4 py-4 text-center text-sm text-zinc-500 font-mono tracking-widest uppercase">
+      <footer className="border-t border-zinc-200 dark:border-slate-800/80 bg-zinc-100 dark:bg-[#07090e] px-4 py-4 text-center text-sm text-zinc-400 dark:text-zinc-500 font-mono tracking-widest uppercase transition-colors duration-300">
         RESTRICTED FORENSIC SYSTEM // JOCKY ENGINE // DO NOT DISTRIBUTE // DISPATCH AUTHORIZED ONLY
       </footer>
     </div>
