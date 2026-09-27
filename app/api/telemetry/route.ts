@@ -13,10 +13,11 @@ export async function GET() {
       serverTime: new Date().toISOString(),
       engine: "JOCKY-ENGINE-v4.9.2-WIN64"
     });
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({
       success: false,
-      error: error.message
+      error: message
     }, { status: 500 });
   }
 }
@@ -46,11 +47,12 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString()
     }, { status: 200 });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("[JOCKY-API] Error ingesting telemetry:", error);
+    const message = error instanceof Error ? error.message : "Internal server error processing forensic telemetry";
     return NextResponse.json({
       success: false,
-      error: error.message || "Internal server error processing forensic telemetry"
+      error: message
     }, { status: 500 });
   }
 }

@@ -1,12 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Shield, Radio, Play, Terminal, Activity, CheckCircle2, Loader2, Search } from 'lucide-react';
+import { Shield, Radio, Play, Loader2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface HeaderProps {
-  lastUpdated: string;
-  batchCount: number;
   latestBatchId: string;
   isStreaming: boolean;
   onTriggerTestBurst: () => void;
@@ -14,8 +12,6 @@ interface HeaderProps {
 }
 
 export function ClassifiedHeader({
-  lastUpdated,
-  batchCount,
   latestBatchId,
   isStreaming,
   onTriggerTestBurst,
@@ -35,7 +31,6 @@ export function ClassifiedHeader({
 
   return (
     <header className="border-b border-zinc-200 dark:border-slate-800/90 bg-white/95 dark:bg-[#0b0d13]/95 backdrop-blur-md sticky top-0 z-50 shadow-sm dark:shadow-lg transition-colors duration-300">
-      {/* Top Classified Intelligence Banner Stripe */}
       <div className="bg-zinc-100 dark:bg-[#07080c] border-b border-zinc-200 dark:border-slate-800/60 px-4 py-1.5 text-xs flex justify-between items-center text-zinc-600 dark:text-zinc-400 transition-colors duration-300">
         <div className="flex items-center space-x-2.5">
           <span className="relative flex h-2 w-2">
@@ -65,9 +60,7 @@ export function ClassifiedHeader({
         </div>
       </div>
 
-      {/* Main Command Header Content */}
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
-        {/* Brand & Subsystem Specs */}
         <div className="flex items-center space-x-3.5">
           <div className="relative p-2.5 bg-zinc-50 dark:bg-[#090b10] border border-zinc-200 dark:border-slate-700/80 rounded-lg shadow-sm dark:shadow-inner group transition-colors duration-300">
             <Shield className="w-6 h-6 text-emerald-600 dark:text-emerald-400 transition-transform duration-200 group-hover:scale-105" />
@@ -96,9 +89,7 @@ export function ClassifiedHeader({
           </div>
         </div>
 
-        {/* Prominent Live State & Primary Actions */}
         <div className="flex items-center space-x-3 flex-wrap">
-          {/* Prominent Stream Status Pill */}
           <div className="flex items-center space-x-2 px-3 py-1.5 rounded-md bg-zinc-50 dark:bg-[#090b10] border border-zinc-200 dark:border-slate-700/90 shadow-sm text-sm transition-colors duration-300">
             <span className="relative flex h-2.5 w-2.5">
               {isLoading ? (
@@ -121,7 +112,6 @@ export function ClassifiedHeader({
             </span>
           </div>
 
-          {/* Latest Batch Info Pill */}
           <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-md bg-zinc-50 dark:bg-[#090b10] border border-zinc-200 dark:border-slate-700/90 shadow-sm text-sm transition-colors duration-300">
             <span className="text-zinc-500 dark:text-zinc-400 text-xs tracking-wider uppercase font-medium">LATEST BATCH:</span>
             <span className="text-zinc-800 dark:text-zinc-200 font-mono text-sm bg-zinc-100 dark:bg-slate-900/90 px-2 py-0.5 rounded border border-zinc-300 dark:border-slate-800 text-emerald-700 dark:text-emerald-300">
@@ -129,7 +119,6 @@ export function ClassifiedHeader({
             </span>
           </div>
 
-          {/* Interactive Ingestion Simulation Button */}
           <button
             id="trigger-test-burst-btn"
             onClick={onTriggerTestBurst}

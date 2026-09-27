@@ -1,11 +1,4 @@
 #!/usr/bin/env python3
-"""
-================================================================================
-   JOCKY ENGINE :: LOW-LEVEL FORENSIC EXTRACTION UTILITY [BUILD 2026.09-x64]
-   CLASSIFICATION: TOP SECRET // FORENSIC TELEMETRY // RESTRICTED ACCESS
-   TARGET ENVIRONMENT: WIN64 NATIVE SUBSYSTEM [RING-3 -> DIRECT SYSCALLS]
-================================================================================
-"""
 
 import sys
 import os
@@ -15,9 +8,8 @@ import random
 import argparse
 from datetime import datetime, timezone
 
-# Configure Windows console for UTF-8 and ANSI sequences
 if sys.platform == "win32":
-    os.system("")  # Enables Virtual Terminal Sequences in Windows conhost / cmd.exe
+    os.system("")
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
@@ -30,7 +22,6 @@ except ImportError:
     print("[!] Error: 'requests' module not found. Run: pip install requests")
     sys.exit(1)
 
-# ANSI terminal formatting for Windows low-level binary appearance
 GREEN = "\033[38;2;16;185;129m"
 BRIGHT_GREEN = "\033[38;2;52;211;153m"
 EMERALD = "\033[38;2;5;150;105m"
@@ -71,17 +62,14 @@ def log_warn(step, msg):
     print(f"{DARK_GRAY}[{timestamp}]{RESET} {YELLOW}[!]{RESET} {BOLD}{YELLOW}{step}{RESET} :: {WHITE}{msg}{RESET}")
 
 def run_extraction_sequence():
-    """Simulates realistic low-level forensic compilation / execution."""
     print(f"{DARK_GRAY}[>] Initializing Ring-3 -> Direct NT Syscall translation table...{RESET}")
     time.sleep(1.0)
 
-    # 1. Establishing Direct Syscalls
     log_info("Establishing Direct Syscalls", "Resolving Halo's Gate Zw/Nt system service numbers", ssn="0x0026", addr="0x7FFE0300")
     time.sleep(1.0)
     log_success("Syscall Stubs Loaded", "148 direct stub vectors mapped into RX memory region", details="PAGE_EXECUTE_READ")
     time.sleep(1.0)
 
-    # 2. Bypassing User Mode Hooks
     log_info("Bypassing User Mode Hooks", "Scanning ntdll.dll .text section for 0xE9 inline detour jumps", addr="0x7FFF6EA10000")
     time.sleep(1.0)
     log_warn("AV/EDR Hooks Detected", "Identified 4 inline trampolines on NtReadVirtualMemory & NtOpenProcess")
@@ -89,13 +77,11 @@ def run_extraction_sequence():
     log_success("Bypassing User Mode Hooks", "Restored clean NTDLL syscall prologue bytes from KnownDlls cache", details="UNHOOK_VERIFIED")
     time.sleep(1.0)
 
-    # 3. Elevating Token Privileges
     log_info("Token Privilege Escalation", "Acquiring SeDebugPrivilege, SeSecurityPrivilege, SeBackupPrivilege", ssn="0x0041")
     time.sleep(1.0)
     log_success("Security Token Acquired", "Integrity Level: SYSTEM (SID: S-1-5-18)", details="EPROCESS_ACTIVE")
     time.sleep(1.0)
 
-    # 4. Extracting Memory Hives
     log_info("Extracting Memory Hives", "Walking _CMHIVE pool allocations & Raw Registry Transaction Logs", addr="0xFFFFC000021A4B00")
     time.sleep(1.0)
     log_info("Extracting Memory Hives", "Parsing HKLM\\SYSTEM, HKLM\\SAM, and NTUSER.DAT hives via unbuffered DMA reads")
@@ -103,17 +89,14 @@ def run_extraction_sequence():
     log_success("Extracting Memory Hives", "Deserialized 3,412 registry keys, 8 persistence vectors cataloged", details="HIVE_DUMP_OK")
     time.sleep(1.0)
 
-    # 5. Socket and Process Telemetry Extraction
     log_info("Enumerating Telemetry", "Traversing ActiveProcessLinks circular list and TCP_LISTENER tables", addr="0xFFFFD801E0942080")
     time.sleep(1.0)
     log_success("Telemetry Serialized", "Generated forensic snapshot with 18 high-fidelity security artifacts")
     time.sleep(1.0)
 
 def generate_mock_telemetry():
-    """Generates classified forensic mock telemetry payload."""
     now_iso = datetime.now(timezone.utc).isoformat()
     
-    # Process IDs and Telemetry
     processes = [
         {
             "pid": 8412,
@@ -207,7 +190,6 @@ def generate_mock_telemetry():
         }
     ]
 
-    # Open Network Ports
     ports = [
         {
             "protocol": "TCP",
@@ -301,7 +283,6 @@ def generate_mock_telemetry():
         }
     ]
 
-    # Registry Persistence Keys
     persistence = [
         {
             "hive": "HKLM",

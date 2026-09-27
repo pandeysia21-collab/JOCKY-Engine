@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
   content: [
@@ -14,11 +13,11 @@ module.exports = {
       },
       colors: {
         classified: {
-          darkest: '#09090b', // zinc-950
+          darkest: '#09090b',
           card: '#121215',
-          border: '#334155', // slate-700
-          borderLight: '#475569', // slate-600
-          accent: '#10b981', // emerald-500
+          border: '#334155',
+          borderLight: '#475569',
+          accent: '#10b981',
           accentGlow: '#059669',
           alert: '#ef4444',
           warn: '#f59e0b',

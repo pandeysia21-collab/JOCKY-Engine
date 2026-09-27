@@ -21,9 +21,7 @@ import {
   ChevronRight, 
   Copy, 
   Check,
-  Shield,
-  Layers,
-  ArrowUpRight
+  Shield
 } from 'lucide-react';
 
 interface TelemetryTablesProps {
@@ -64,7 +62,6 @@ export function TelemetryTables({
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  // Filter processes
   const filteredProcesses = processes.filter(p => {
     const matchesSearch = 
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -78,7 +75,6 @@ export function TelemetryTables({
     return matchesSearch;
   });
 
-  // Filter ports
   const filteredPorts = ports.filter(port => {
     const matchesSearch = 
       port.localPort.toString().includes(searchQuery) ||
@@ -92,7 +88,6 @@ export function TelemetryTables({
     return matchesSearch;
   });
 
-  // Filter persistence
   const filteredPersistence = persistence.filter(k => {
     const matchesSearch = 
       k.keyPath.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -116,9 +111,7 @@ export function TelemetryTables({
 
   return (
     <div className="bg-white dark:bg-[#0b0e14]/90 border border-zinc-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm dark:shadow-2xl backdrop-blur-md transition-colors duration-300">
-      {/* Central Navigation & Filters Header */}
       <div className="border-b border-zinc-200 dark:border-slate-800 bg-zinc-50 dark:bg-[#07090e] px-4 py-3 flex flex-wrap items-center justify-between gap-4 transition-colors duration-300">
-        {/* Tab Selection */}
         <div className="flex items-center space-x-1 sm:space-x-1.5 overflow-x-auto scrollbar-none">
           <button
             onClick={() => setActiveTab('processes')}
@@ -193,9 +186,7 @@ export function TelemetryTables({
           </button>
         </div>
 
-        {/* Search & Filter Controls */}
         <div className="flex items-center space-x-4 w-full md:w-auto">
-          {/* Live Indicator */}
           <div className="hidden lg:flex items-center space-x-2 text-xs font-semibold mr-2">
             {hasTelemetry ? (
               <>
@@ -238,9 +229,7 @@ export function TelemetryTables({
         </div>
       </div>
 
-      {/* Main Table Content Areas */}
       <div className="overflow-x-auto min-h-[440px]">
-        {/* TAB 1: PROCESS IDS TABLE */}
         {activeTab === 'processes' && (
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -315,7 +304,6 @@ export function TelemetryTables({
                       </td>
                     </tr>
 
-                    {/* Expandable Deep Inspection Panel */}
                     {isExpanded && (
                       <tr className="bg-zinc-50/50 dark:bg-[#090b11] border-b border-zinc-200 dark:border-slate-800 transition-colors">
                         <td colSpan={7} className="p-4 pl-12 text-zinc-700 dark:text-zinc-300">
@@ -362,7 +350,6 @@ export function TelemetryTables({
           </table>
         )}
 
-        {/* TAB 2: OPEN NETWORK PORTS TABLE */}
         {activeTab === 'ports' && (
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -423,7 +410,6 @@ export function TelemetryTables({
           </table>
         )}
 
-        {/* TAB 3: REGISTRY PERSISTENCE KEYS TABLE */}
         {activeTab === 'persistence' && (
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -472,7 +458,6 @@ export function TelemetryTables({
           </table>
         )}
 
-        {/* TAB 4: LIVE TERMINAL LOG STREAM */}
         {activeTab === 'logs' && (
           <div className="p-4 bg-zinc-50 dark:bg-[#080a0f] font-mono text-xs space-y-2 transition-colors duration-300 h-full min-h-[440px]">
             <div className="flex items-center justify-between pb-2 border-b border-zinc-200 dark:border-slate-800 text-[11px] text-zinc-500 dark:text-zinc-400 transition-colors">
@@ -518,7 +503,6 @@ export function TelemetryTables({
           </div>
         )}
 
-        {/* TAB 5: RAW JSON INSPECTOR */}
         {activeTab === 'json' && (
           <div className="p-4 bg-zinc-50 dark:bg-[#080a0f] font-mono text-xs transition-colors duration-300 h-full min-h-[440px]">
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-200 dark:border-slate-800 transition-colors">
@@ -551,7 +535,6 @@ export function TelemetryTables({
         )}
       </div>
 
-      {/* Footer Info Strip */}
       <div className="border-t border-zinc-200 dark:border-slate-800 bg-zinc-100 dark:bg-[#07090e] px-4 py-3 text-sm text-zinc-500 dark:text-zinc-400 flex flex-wrap items-center justify-between gap-2 transition-colors duration-300">
         <div className="flex items-center space-x-3">
           <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-semibold text-base">

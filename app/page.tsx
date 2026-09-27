@@ -11,7 +11,7 @@ import {
   ExtractionEventLog,
   TelemetryBatch 
 } from '@/lib/types';
-import { Terminal, Shield, Play, ArrowRight, Zap, RefreshCw, Cpu, Layers } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 
 export default function DashboardPage() {
   const [processes, setProcesses] = useState<ProcessTelemetry[]>([]);
@@ -26,7 +26,6 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [flashNewData, setFlashNewData] = useState<boolean>(false);
 
-  // Apply new snapshot into state
   const applySnapshot = useCallback((data: any) => {
     if (!data) return;
     if (data.processes) setProcesses(data.processes);
@@ -38,12 +37,10 @@ export default function DashboardPage() {
     if (data.latestBatchId) setLatestBatchId(data.latestBatchId);
     setLatestPayloadJson(data);
 
-    // Visual ping flash
     setFlashNewData(true);
     setTimeout(() => setFlashNewData(false), 800);
   }, []);
 
-  // Fetch initial telemetry via GET
   const fetchTelemetry = useCallback(async () => {
     try {
       const res = await fetch('/api/telemetry', { cache: 'no-store' });
@@ -58,7 +55,6 @@ export default function DashboardPage() {
     }
   }, [applySnapshot]);
 
-  // Establish SSE connection for zero-refresh real-time push
   useEffect(() => {
     fetchTelemetry();
 
@@ -72,18 +68,16 @@ export default function DashboardPage() {
         try {
           const data = JSON.parse(event.data);
           applySnapshot(data);
-        } catch (err) {
-          // ignore keepalive pings
+        } catch {
         }
       };
       eventSource.onerror = () => {
         setIsStreaming(false);
       };
-    } catch (e) {
+    } catch {
       setIsStreaming(false);
     }
 
-    // Fallback polling interval every 2.5 seconds
     const pollInterval = setInterval(() => {
       fetchTelemetry();
     }, 2500);
@@ -96,7 +90,6 @@ export default function DashboardPage() {
     };
   }, [fetchTelemetry, applySnapshot]);
 
-  // Trigger test burst directly from UI (calls POST /api/telemetry)
   const handleTriggerTestBurst = async () => {
     setIsLoading(true);
     try {
@@ -198,25 +191,18 @@ export default function DashboardPage() {
 
   return (
     <div className="flex-1 flex flex-col relative z-10 bg-radial-vignette min-h-screen">
-      {/* Visual Flash Banner upon Incoming Packet */}
       {flashNewData && (
         <div className="fixed top-0 left-0 right-0 h-1 bg-emerald-400 glow-emerald-subtle z-50 transition-all duration-300 animate-pulse" />
       )}
 
-      {/* Classified Header */}
       <ClassifiedHeader
-        lastUpdated={lastUpdated}
-        batchCount={batchCount}
         latestBatchId={latestBatchId}
         isStreaming={isStreaming}
         onTriggerTestBurst={handleTriggerTestBurst}
         isLoading={isLoading}
       />
 
-      {/* Main Forensic Dashboard Body */}
       <main className="w-full px-4 sm:px-6 lg:px-8 py-6 flex-1 flex flex-col space-y-6">
-        
-        {/* System Status Panel */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-0">
           <div className="p-3 bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800 rounded-lg shadow-sm dark:shadow-md transition-colors duration-300">
             <div className="text-[10px] font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-1.5">Telemetry</div>
@@ -255,7 +241,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Stats & Key Performance Indicators */}
         <StatsOverview
           processes={processes}
           ports={ports}
@@ -263,7 +248,6 @@ export default function DashboardPage() {
           batchCount={batchCount}
         />
 
-        {/* Central Telemetry Tables (Processes, Ports, Persistence, Logs, JSON) */}
         <TelemetryTables
           processes={processes}
           ports={ports}
@@ -272,7 +256,6 @@ export default function DashboardPage() {
           latestPayloadJson={latestPayloadJson}
         />
 
-        {/* Terminal Quick Execution Guide for Video Demonstration */}
         <div className="bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800 rounded-lg p-4 font-mono text-base text-zinc-600 dark:text-zinc-400 shadow-sm dark:shadow-md transition-colors duration-300">
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-200 dark:border-slate-800 transition-colors">
             <div className="flex items-center space-x-3 text-zinc-800 dark:text-zinc-200 font-semibold text-lg">
@@ -310,7 +293,6 @@ export default function DashboardPage() {
         </div>
       </main>
 
-      {/* Footer Classification Bar */}
       <footer className="border-t border-zinc-200 dark:border-slate-800/80 bg-zinc-100 dark:bg-[#07090e] px-4 py-4 text-center text-sm text-zinc-400 dark:text-zinc-500 font-mono tracking-widest uppercase transition-colors duration-300">
         RESTRICTED FORENSIC SYSTEM // JOCKY ENGINE // DO NOT DISTRIBUTE // DISPATCH AUTHORIZED ONLY
       </footer>

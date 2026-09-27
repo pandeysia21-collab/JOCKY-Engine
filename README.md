@@ -38,7 +38,6 @@ High-fidelity tactical UI and terminal mock built for video demonstrations of mo
 1. Ensure the dashboard is running on port 3000:
    ```powershell
    npm run dev
-   # OR for production build:
    npm run start
    ```
 2. Open your browser to:

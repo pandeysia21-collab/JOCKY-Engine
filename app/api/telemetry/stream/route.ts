@@ -8,20 +8,16 @@ export async function GET(request: NextRequest) {
 
   const customStream = new ReadableStream({
     start(controller) {
-      // Send initial snapshot immediately
       const initial = getTelemetrySnapshot();
       controller.enqueue(encoder.encode(`data: ${JSON.stringify(initial)}\n\n`));
 
-      // Subscribe to subsequent batches
       const unsubscribe = subscribeTelemetry((updatedData) => {
         try {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(updatedData)}\n\n`));
-        } catch (e) {
-          // Client closed connection
+        } catch {
         }
       });
 
-      // Keepalive ping every 15 seconds
       const pingInterval = setInterval(() => {
         try {
           controller.enqueue(encoder.encode(`: ping\n\n`));

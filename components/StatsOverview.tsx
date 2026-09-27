@@ -18,7 +18,6 @@ export function StatsOverview({ processes, ports, persistence, batchCount }: Sta
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      {/* Metric 1: Processes */}
       <div className="bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800/90 hover:border-zinc-300 dark:hover:border-slate-700/90 rounded-lg p-4 transition-all duration-300 shadow-sm dark:shadow-md relative overflow-hidden group flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between mb-3">
@@ -45,7 +44,6 @@ export function StatsOverview({ processes, ports, persistence, batchCount }: Sta
         <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500/80 via-emerald-500/20 to-transparent opacity-50 dark:opacity-100" />
       </div>
 
-      {/* Metric 2: Network Connections */}
       <div className="bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800/90 hover:border-zinc-300 dark:hover:border-slate-700/90 rounded-lg p-4 transition-all duration-300 shadow-sm dark:shadow-md relative overflow-hidden group flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between mb-3">
@@ -72,7 +70,6 @@ export function StatsOverview({ processes, ports, persistence, batchCount }: Sta
         <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500/80 via-emerald-500/20 to-transparent opacity-50 dark:opacity-100" />
       </div>
 
-      {/* Metric 3: Persistence Entries */}
       <div className="bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800/90 hover:border-zinc-300 dark:hover:border-slate-700/90 rounded-lg p-4 transition-all duration-300 shadow-sm dark:shadow-md relative overflow-hidden group flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between mb-3">
@@ -99,7 +96,6 @@ export function StatsOverview({ processes, ports, persistence, batchCount }: Sta
         <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500/80 via-emerald-500/20 to-transparent opacity-50 dark:opacity-100" />
       </div>
 
-      {/* Metric 4: Security Artifacts */}
       <div className="bg-white dark:bg-[#0e1118]/85 border border-zinc-200 dark:border-slate-800/90 hover:border-zinc-300 dark:hover:border-slate-700/90 rounded-lg p-4 transition-all duration-300 shadow-sm dark:shadow-md relative overflow-hidden group flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between mb-3">

@@ -1,8 +1,6 @@
 import { TelemetryBatch, ProcessTelemetry, NetworkPortTelemetry, RegistryPersistenceTelemetry, ExtractionEventLog } from './types';
 
-// Global memory store for Next.js development server
 declare global {
-  // eslint-disable-next-line no-var
   var __JOCKY_TELEMETRY_STORE__: {
     lastUpdated: string;
     batchCount: number;
@@ -302,7 +300,7 @@ if (!global.__JOCKY_TELEMETRY_STORE__) {
   };
 }
 
-export const telemetryStore = global.__JOCKY_TELEMETRY_STORE__;
+export const telemetryStore = global.__JOCKY_TELEMETRY_STORE__!;
 
 export function addTelemetryBatch(batch: TelemetryBatch) {
   telemetryStore.lastUpdated = batch.timestamp || new Date().toISOString();
@@ -327,7 +325,7 @@ export function addTelemetryBatch(batch: TelemetryBatch) {
     title: batch.logEvent?.title || `Batch Ingested [${batch.batchId}]`,
     status: batch.logEvent?.status || "INGESTED_OK",
     details: batch.logEvent?.details || `Received payload from ${batch.hostInfo?.hostname || 'Remote Host'}`,
-    color: (batch.logEvent?.color as any) || "emerald",
+    color: batch.logEvent?.color || "emerald",
     batchId: batch.batchId
   };
 
@@ -336,13 +334,11 @@ export function addTelemetryBatch(batch: TelemetryBatch) {
     telemetryStore.logs = telemetryStore.logs.slice(0, 50);
   }
 
-  // Notify listeners (SSE streams)
   const currentSnapshot = getTelemetrySnapshot();
   telemetryStore.listeners.forEach((listener) => {
     try {
       listener(currentSnapshot);
-    } catch (e) {
-      // Listener disconnected
+    } catch {
     }
   });
 
