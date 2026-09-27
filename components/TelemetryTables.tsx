@@ -533,17 +533,17 @@ export function TelemetryTables({
       </div>
 
       {/* Footer Info Strip */}
-      <div className="border-t border-slate-800 bg-[#07090e] px-4 py-2.5 text-[11px] text-zinc-400 flex flex-wrap items-center justify-between gap-2">
+      <div className="border-t border-slate-800 bg-[#07090e] px-4 py-3 text-sm text-zinc-400 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center space-x-3">
-          <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
-            <ShieldCheck className="w-4 h-4" />
+          <span className="flex items-center gap-1.5 text-emerald-400 font-semibold text-base">
+            <ShieldCheck className="w-5 h-5" />
             <span>DIRECT KERNEL EXTRACTION ENGINE</span>
           </span>
           <span className="text-slate-700">•</span>
           <span>API ENDPOINT: <span className="text-zinc-300 font-mono">POST /api/telemetry</span></span>
         </div>
-        <div className="text-zinc-400">
-          Showing <span className="text-emerald-400 font-bold">{
+        <div className="text-zinc-400 text-sm">
+          Showing <span className="text-emerald-400 font-bold text-base">{
             activeTab === 'processes' ? filteredProcesses.length :
             activeTab === 'ports' ? filteredPorts.length :
             activeTab === 'persistence' ? filteredPersistence.length : logs.length

@@ -214,7 +214,7 @@ export default function DashboardPage() {
       />
 
       {/* Main Forensic Dashboard Body */}
-      <main className="max-w-7xl mx-auto px-4 py-6 w-full flex-1 flex flex-col space-y-6">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-6 flex-1 flex flex-col space-y-6">
         
         {/* Top Status Alerts & Syscall Subsystem Notice */}
         <div className="p-3.5 bg-[#0e1118]/85 border border-slate-800 rounded-lg flex flex-wrap items-center justify-between gap-3 text-xs shadow-md backdrop-blur-sm">
@@ -262,36 +262,36 @@ export default function DashboardPage() {
         />
 
         {/* Terminal Quick Execution Guide for Video Demonstration */}
-        <div className="bg-[#0e1118]/85 border border-slate-800 rounded-lg p-4 font-mono text-xs text-zinc-400 shadow-md">
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
-            <div className="flex items-center space-x-2 text-zinc-200 font-semibold">
-              <Terminal className="w-4 h-4 text-emerald-400" />
+        <div className="bg-[#0e1118]/85 border border-slate-800 rounded-lg p-4 font-mono text-base text-zinc-400 shadow-md">
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+            <div className="flex items-center space-x-3 text-zinc-200 font-semibold text-lg">
+              <Terminal className="w-5 h-5 text-emerald-400" />
               <span>TERMINAL DEMONSTRATION RUNBOOK // PART B COMMAND LINE AGENT</span>
             </div>
-            <span className="text-[10px] text-zinc-500 uppercase tracking-wider">MSVC x64 CUI SIMULATION</span>
+            <span className="text-sm text-zinc-500 uppercase tracking-wider">MSVC x64 CUI SIMULATION</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            <div className="p-3 bg-[#080a0f] rounded-md border border-slate-800 text-[11px] space-y-1.5">
-              <div className="text-emerald-400 font-bold flex items-center gap-1.5">
+            <div className="p-4 bg-[#080a0f] rounded-md border border-slate-800 text-sm space-y-2">
+              <div className="text-emerald-400 font-bold flex items-center gap-1.5 text-base">
                 <span>Step 1: Execute Python Forensic Extractor</span>
               </div>
-              <div className="text-zinc-200 bg-[#0e1118] p-2.5 rounded-md border border-slate-800 select-all font-mono text-xs">
+              <div className="text-zinc-200 bg-[#0e1118] p-3 rounded-md border border-slate-800 select-all font-mono text-base">
                 python jocky_extractor.py
               </div>
-              <p className="text-[10px] text-zinc-400 font-sans leading-relaxed">
+              <p className="text-sm text-zinc-400 font-sans leading-relaxed">
                 Runs with realistic 1-second delays between syscall resolution, unhooking, hive dumps, and sends HTTP POST to <code className="text-emerald-400 font-mono">/api/telemetry</code>.
               </p>
             </div>
 
-            <div className="p-3 bg-[#080a0f] rounded-md border border-slate-800 text-[11px] space-y-1.5">
-              <div className="text-emerald-400 font-bold">
+            <div className="p-4 bg-[#080a0f] rounded-md border border-slate-800 text-sm space-y-2">
+              <div className="text-emerald-400 font-bold text-base">
                 Step 2: Real-Time Dynamic Ingestion
               </div>
-              <p className="text-zinc-300 font-sans text-xs leading-relaxed">
+              <p className="text-zinc-300 font-sans text-base leading-relaxed">
                 Observe the central telemetry table above updating <strong className="text-emerald-400 font-semibold">dynamically without reloading the page</strong> when the Python script dispatches its forensic payload!
               </p>
-              <div className="text-[10px] text-zinc-400 font-mono pt-1">
+              <div className="text-sm text-zinc-400 font-mono pt-1">
                 Endpoint: <span className="text-zinc-200">http://localhost:3000/api/telemetry</span> [POST]
               </div>
             </div>
@@ -300,7 +300,7 @@ export default function DashboardPage() {
       </main>
 
       {/* Footer Classification Bar */}
-      <footer className="border-t border-slate-800/80 bg-[#07090e] px-4 py-3 text-center text-[10px] text-zinc-500 font-mono tracking-widest uppercase">
+      <footer className="border-t border-slate-800/80 bg-[#07090e] px-4 py-4 text-center text-sm text-zinc-500 font-mono tracking-widest uppercase">
         RESTRICTED FORENSIC SYSTEM // JOCKY ENGINE // DO NOT DISTRIBUTE // DISPATCH AUTHORIZED ONLY
       </footer>
     </div>
